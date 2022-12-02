@@ -1,9 +1,10 @@
 <template>
     <v-container>
-    <v-form ref="form">
+    <v-form ref="form"  @submit.prevent="login">
         <v-row justify="center">
             <v-col cols="8">
-                <h3>Login</h3>
+                <v-app-bar class="pa-4 text-center red lighten-2 rounded-lg rounded-b-0">
+      </v-app-bar>
             </v-col>
             <v-col cols="8">
                 <v-text-field v-model="email" label="E-mail"  @blur="$v.email.$touch()"></v-text-field>
@@ -13,17 +14,18 @@
                         </v-text-field>
             </v-col>
             <v-col cols="8">
-                <v-btn class="mr-4" @click="login">Login</v-btn>
+                <v-btn class="mr-4" type="submit">Login</v-btn>
             </v-col>
         </v-row>
       </v-form>
     </v-container>
   </template>
 <script>
-
+import BookStoreUserService from '../service/BookStoreUserService'
 export default {
   name: 'SignIn',
   data: () => ({
+    bookStoreUserService: new BookStoreUserService(),
     email: '',
     password: ''
   }),
@@ -40,8 +42,27 @@ export default {
 
   methods: {
     login () {
-      this.$v.$touch()
+      this.bookStoreUserService.login({
+        username: this.email,
+        password: this.password
+      })
+        .then(response => {
+          this.response = JSON.stringify(response, null, 2)
+          alert('User ' + this.email + ' Login successfully' + response)
+          location.href = location.hostname
+        })
+        .catch(error => {
+          alert('Error adding User ' + this.name + ' ' + error.message)
+          this.response = 'Error: ' + error.response.status
+        })
     }
   }
 }
 </script>
+<style>
+  .book-store-logo{
+    height:40px;
+    width:35px;
+    margin-right: 10px;
+  }
+</style>

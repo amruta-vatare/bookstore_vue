@@ -3,10 +3,20 @@
     <v-form ref="form">
         <v-row justify="center">
             <v-col cols="8">
-                <h3>Create your account</h3>
+                <v-app-bar class="pa-4 text-center red lighten-2 rounded-lg rounded-b-0">
+      </v-app-bar>
             </v-col>
             <v-col cols="8">
-                <v-text-field v-model="name" label="Name" @blur="$v.name.$touch()"></v-text-field>
+                <v-row justify="center">
+                    <v-col>
+                        <v-text-field v-model="firstName" label="First Name"  @blur="$v.first_name.$touch()">
+                        </v-text-field>
+                    </v-col>
+                    <v-col>
+                        <v-text-field v-model="lastName" label="Last Name"  @blur="$v.last_name.$touch()">
+                        </v-text-field>
+                    </v-col>
+                </v-row>
             </v-col>
             <v-col cols="8">
                 <v-row>
@@ -14,7 +24,16 @@
                         <v-text-field v-model="email" label="E-mail"  @blur="$v.email.$touch()"></v-text-field>
                     </v-col>
                     <v-col>
-                        <v-text-field v-model="phoneNo" label="PhoneNo"  @blur="$v.phoneNo.$touch()"></v-text-field>
+                        <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date" transition="scale-transition" offset-y min-width="auto">
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field v-model="dob" label="Date of birth" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+        </template>
+        <v-date-picker v-model="dob" no-title scrollable>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+          <v-btn text color="primary" @click="$refs.menu.save(dob)"> OK </v-btn>
+        </v-date-picker>
+      </v-menu>
                     </v-col>
                 </v-row>
             </v-col>
@@ -25,31 +44,35 @@
             <v-col cols="8">
                 <v-row justify="center">
                     <v-col>
-                        <v-text-field v-model="password" label="Password"  @blur="$v.password.$touch()">
+                        <v-text-field type="password" v-model="password" label="Password"  @blur="$v.password.$touch()">
                         </v-text-field>
                     </v-col>
                     <v-col>
-                        <v-text-field v-model="confirmPass" label="Confirm Password"  @blur="$v.confirmPass.$touch()">
+                        <v-text-field type="password" v-model="confirmPass" label="Confirm Password"  @blur="$v.confirmPass.$touch()">
                         </v-text-field>
                     </v-col>
                 </v-row>
             </v-col>
             <v-col cols="8">
-                <v-btn class="mr-4" @click="submit">submit</v-btn>
-                <v-btn @click="clear">clear</v-btn>
+                <v-btn class="mr-4" @click="UserSignUp()">submit</v-btn>
+                <v-btn @click="clear()">clear</v-btn>
             </v-col>
         </v-row>
       </v-form>
     </v-container>
   </template>
 <script>
-
+import BookStoreUserService from '../service/BookStoreUserService'
+import router from '@/router'
 export default {
   name: 'SignUp',
   data: () => ({
-    name: '',
+    bookStoreUserService: new BookStoreUserService(),
+    firstName: '',
+    lastName: '',
     email: '',
-    phoneNo: '',
+    dob: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    menu: false,
     address: '',
     password: '',
     confirmPass: ''
@@ -85,11 +108,31 @@ export default {
   },
 
   methods: {
+    UserSignUp () {
+      this.bookStoreUserService.add({
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        dob: this.dob,
+        address: this.address,
+        password: this.password
+      })
+        .then(response => {
+          this.response = JSON.stringify(response, null, 2)
+          alert('User ' + this.email + ' added successfully')
+          router.push({ name: 'SignIn' })
+          // location.href = location.hostname
+        })
+        .catch(error => {
+          alert('Error adding User ' + this.name + ' ' + error.message)
+          this.response = 'Error: ' + error.response.status
+        })
+    },
     submit () {
-      this.$v.$touch()
+      this.$refs.form.$touch()
     },
     clear () {
-      this.$v.$reset()
+      this.$refs.form.reset()
       this.name = ''
       this.email = ''
       this.select = null

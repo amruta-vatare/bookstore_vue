@@ -1,19 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VHomeView from '../views/VHomeView.vue'
 import SignIn from '../components/SignIn.vue'
 import SignUp from '../components/SignUp.vue'
+import BookCard from '../components/BookCard'
+import BookCardList from '../components/BookCardList'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: VHomeView
+    name: 'BookCardList',
+    component: BookCardList
   },
   {
-    path: '/signIn',
+    path: '/signin',
     name: 'SignIn',
     component: SignIn
   },
@@ -21,6 +22,16 @@ const routes = [
     path: '/signup',
     name: 'SignUp',
     component: SignUp
+  },
+  {
+    path: '/bookCard',
+    name: 'BookCard',
+    component: BookCard
+  },
+  {
+    path: '/bookCardList',
+    name: 'BookCardList',
+    component: BookCardList
   }
 ]
 

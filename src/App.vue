@@ -13,10 +13,10 @@
     <v-btn depressed right color="red lighten-2">Cart
       <v-icon right dark>mdi-cart-outline</v-icon>
     </v-btn>
-    <v-btn depressed right color="red lighten-2">Sign In
+    <v-btn @click="SignInBtnClicked()" depressed right color="red lighten-2">Sign In
         <v-icon right dark>mdi-login-variant</v-icon>
     </v-btn>
-    <v-btn depressed right color="red lighten-2">Sign Up
+    <v-btn @click="SignUpBtnClicked()" depressed right color="red lighten-2">Sign Up
       <v-icon right dark>mdi-arrow-right-drop-circle-outline</v-icon>
     </v-btn>
   </v-app-bar>
@@ -32,14 +32,23 @@
 </template>
 
 <script>
-
+import router from '@/router'
 export default {
   name: 'App',
 
   data: () => ({
     appTitle: 'Bookstore',
     appFooter: 'Copyright © 2022, Amruta bookstore pvt limited. All rights reserved.'
-  })
+  }),
+  methods:
+  {
+    SignInBtnClicked () {
+      router.push({ name: 'SignIn' })
+    },
+    SignUpBtnClicked () {
+      router.push({ name: 'SignUp' })
+    }
+  }
 }
 </script>
 <style>
