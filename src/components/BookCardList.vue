@@ -1,5 +1,8 @@
 <template>
     <v-container>
+      <div style="width:100%; height: 20px; color: darkgray; background-color: gainsboro">
+
+      </div>
     <div class="flex-container">
         <BookCard v-for="item in cardItems" :cardItem="item" :key="item"></BookCard>
     </div>

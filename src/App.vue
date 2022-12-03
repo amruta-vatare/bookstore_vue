@@ -1,8 +1,8 @@
 <template>
 <v-app>
-  <v-app-bar app color="red lighten-2">
-    <img src="./assets/bookstoreLogo.png"  class="book-store-logo"/>
-    <v-toolbar-title v-text="appTitle"></v-toolbar-title>
+  <v-app-bar v-show="isSignedIn" app color="red lighten-2">
+    <img src="./assets/bookstoreLogo.png" @click="GotoHomePage" style="cursor:pointer" class="book-store-logo"/>
+    <v-toolbar-title v-text="appTitle" @click="GotoHomePage" style="cursor:pointer"></v-toolbar-title>
     <v-spacer/>
     <div class="searchBox">
       <v-text-field label="Search here" solo >
@@ -10,13 +10,17 @@
       </v-text-field>
     </div>
     <v-spacer/>
-    <v-btn depressed right color="red lighten-2">Cart
+    <v-btn depressed right color="red lighten-2" @click="CartBtnClicked()">Cart
       <v-icon right dark>mdi-cart-outline</v-icon>
+      <span style="margin-left:2px">{{sharedService.cartItemCount}}</span>
     </v-btn>
-    <v-btn @click="SignInBtnClicked()" depressed right color="red lighten-2">Sign In
+    <v-btn v-show="!isSignedIn" @click="SignInBtnClicked()" depressed right color="red lighten-2">Sign In
         <v-icon right dark>mdi-login-variant</v-icon>
     </v-btn>
-    <v-btn @click="SignUpBtnClicked()" depressed right color="red lighten-2">Sign Up
+    <v-btn v-show="!isSignedIn" @click="SignUpBtnClicked()" depressed right color="red lighten-2">Sign Up
+      <v-icon right dark>mdi-arrow-right-drop-circle-outline</v-icon>
+    </v-btn>
+    <v-btn v-show="isSignedIn" @click="SignOutBtnClicked()" depressed right color="red lighten-2">Sign Out
       <v-icon right dark>mdi-arrow-right-drop-circle-outline</v-icon>
     </v-btn>
   </v-app-bar>
@@ -33,12 +37,15 @@
 
 <script>
 import router from '@/router'
+import { sharedService } from './service/AppSharedService'
 export default {
   name: 'App',
 
   data: () => ({
     appTitle: 'Bookstore',
-    appFooter: 'Copyright © 2022, Amruta bookstore pvt limited. All rights reserved.'
+    appFooter: 'Copyright © 2022, Amruta bookstore pvt limited. All rights reserved.',
+    isSignedIn: sharedService.IsSignedIn(),
+    sharedService: sharedService
   }),
   methods:
   {
@@ -47,7 +54,20 @@ export default {
     },
     SignUpBtnClicked () {
       router.push({ name: 'SignUp' })
+    },
+    CartBtnClicked () {
+      router.push({ name: 'UserCart' })
+    },
+    GotoHomePage () {
+      router.push({ name: 'BookCardList' })
+    },
+    SignOutBtnClicked () {
+      sharedService.SetSignedOut()
+      location.href = '/'
     }
+  },
+  created () {
+    sharedService.Initialize()
   }
 }
 </script>
