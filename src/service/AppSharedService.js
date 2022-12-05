@@ -20,15 +20,9 @@ export const sharedService = reactive({
     }
     return false
   },
-  IncrementCartItemCount () {
-    if (localStorage.getItem(this.Key_CartItemCount) != null) {
-      const count = parseInt(localStorage.getItem(this.Key_CartItemCount))
-      localStorage.setItem(this.Key_CartItemCount, count + 1)
-      this.cartItemCount = count + 1
-    } else {
-      localStorage.setItem(this.Key_CartItemCount, '0')
-      this.cartItemCount = 0
-    }
+  SetCartItemCount (count) {
+    localStorage.setItem(this.Key_CartItemCount, count)
+    this.cartItemCount = count
   },
   GetCartItemCount () {
     if (localStorage.getItem(this.Key_CartItemCount) != null) {
@@ -54,5 +48,14 @@ export const sharedService = reactive({
   ClearCartItemCount () {
     localStorage.setItem(this.Key_CartItemCount, '0')
     this.cartItemCount = 0
+  },
+  getSignedInUserAccessToken () {
+    if (localStorage.getItem(this.Key_AccessToken) != null) {
+      const token = localStorage.getItem(this.Key_AccessToken)
+      return token
+    } else {
+      localStorage.setItem(this.Key_AccessToken, null)
+      return null
+    }
   }
 })

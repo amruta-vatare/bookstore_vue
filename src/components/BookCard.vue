@@ -21,18 +21,43 @@
   </template>
 <script>
 import { sharedService } from '@/service/AppSharedService'
+import BookCartService from '@/service/BookCartService'
 export default {
   name: 'BookCard',
   data: () => ({
     loading: false,
     selection: 1,
-    cartItemCount: 0
+    cartItemCount: 0,
+    cartService: new BookCartService()
   }),
   props: ['cardItem'],
   methods: {
     AddItemToBag () {
       // call backend to add the given book to cart of the current user
-      sharedService.IncrementCartItemCount()
+      this.cartService.addToCart(sharedService.getSignedInUserAccessToken(), {
+        bookID: this.cardItem.bookId,
+        quantity: 1
+      }).then(response => {
+        alert('successfully added item to cart' + response)
+
+        // logic to getcart item count
+        this.RefreshCartItemCount()
+      })
+        .catch(error => {
+          alert('Error adding Cart ' + error.message)
+          this.response = 'Error: ' + error.response.status
+        })
+    },
+    RefreshCartItemCount () {
+      this.cartService.getAllCartItems(sharedService.getSignedInUserAccessToken()).then(response => {
+        const cartItems = response.data
+        const count = cartItems.length
+        sharedService.SetCartItemCount(count)
+      })
+        .catch(error => {
+          alert('Failed to get cart item count ' + error.message)
+          this.response = 'Error: ' + error.response.status
+        })
     }
   }
 }
