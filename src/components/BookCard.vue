@@ -13,8 +13,8 @@
             <span class="mdi mdi-currency-rupee"></span>{{cardItem.price}}
         </v-card-text>
       <v-card-actions>
-        <v-btn class="mr-4" color="red lighten-2"  @click="AddItemToBag">ADD To BAG</v-btn>
-        <v-btn class="mr-4" color="deep-orange lighten-3" text @click="AddItemToBag">WISHLIST</v-btn>
+        <v-btn class="mr-4" :disabled="disableAddToCart" color="red lighten-2"  @click="AddItemToBag">ADD To BAG</v-btn>
+        <v-btn class="mr-4" color="deep-orange lighten-3" text>WISHLIST</v-btn>
       </v-card-actions>
     </v-card>
    </div>
@@ -22,31 +22,38 @@
 <script>
 import { sharedService } from '@/service/AppSharedService'
 import BookCartService from '@/service/BookCartService'
+import router from '@/router'
+
 export default {
   name: 'BookCard',
   data: () => ({
     loading: false,
     selection: 1,
     cartItemCount: 0,
+    disableAddToCart: false,
     cartService: new BookCartService()
   }),
   props: ['cardItem'],
   methods: {
     AddItemToBag () {
-      // call backend to add the given book to cart of the current user
-      this.cartService.addToCart(sharedService.getSignedInUserAccessToken(), {
-        bookID: this.cardItem.bookId,
-        quantity: 1
-      }).then(response => {
-        alert('successfully added item to cart' + response)
-
-        // logic to getcart item count
-        this.RefreshCartItemCount()
-      })
-        .catch(error => {
-          alert('Error adding Cart ' + error.message)
-          this.response = 'Error: ' + error.response.status
+      // check if user is logged in, if not redirect to sign in page
+      if (sharedService.IsSignedIn() === false) {
+        router.push('SignIn')
+      } else {
+        // call backend to add the given book to cart of the current user
+        this.cartService.addToCart(sharedService.getSignedInUserAccessToken(), {
+          bookID: this.cardItem.bookId,
+          quantity: 1
+        }).then(response => {
+          // logic to getcart item count
+          this.disableAddToCart = true
+          this.RefreshCartItemCount()
         })
+          .catch(error => {
+            alert('Error adding Cart ' + error.message)
+            this.response = 'Error: ' + error.response.status
+          })
+      }
     },
     RefreshCartItemCount () {
       this.cartService.getAllCartItems(sharedService.getSignedInUserAccessToken()).then(response => {

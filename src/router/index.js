@@ -6,6 +6,7 @@ import BookCard from '../components/BookCard'
 import BookCardList from '../components/BookCardList'
 import UserCart from '../components/UserCart.vue'
 import { sharedService } from '../service/AppSharedService'
+import CustomerDetails from '../components/CustomerDetails.vue'
 
 Vue.use(VueRouter)
 
@@ -13,10 +14,7 @@ const routes = [
   {
     path: '/',
     name: 'BookCardList',
-    component: BookCardList,
-    meta: {
-      requiresAuth: true
-    }
+    component: BookCardList
   },
   {
     path: '/signin',
@@ -48,6 +46,11 @@ const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/customerDetails',
+    name: 'CustomerDetails',
+    component: CustomerDetails
   }
 ]
 

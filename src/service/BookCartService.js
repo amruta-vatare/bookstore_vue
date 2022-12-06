@@ -7,4 +7,10 @@ export default class BookCartService {
   getAllCartItems (userToken) {
     return axios.get('http://localhost:8080/cart/all/' + userToken)
   }
+
+  removeBookFromCart (userToken, paramData) {
+    return axios.delete('http://localhost:8080/cart/remove/' + userToken, {
+      data: paramData
+    })
+  }
 }

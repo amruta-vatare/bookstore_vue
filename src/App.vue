@@ -1,6 +1,6 @@
 <template>
 <v-app>
-  <v-app-bar v-show="isSignedIn" app color="red lighten-2">
+  <v-app-bar app color="red lighten-2">
     <img src="./assets/bookstoreLogo.png" @click="GotoHomePage" style="cursor:pointer" class="book-store-logo"/>
     <v-toolbar-title v-text="appTitle" @click="GotoHomePage" style="cursor:pointer"></v-toolbar-title>
     <v-spacer/>
