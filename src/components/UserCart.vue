@@ -4,13 +4,14 @@
             <v-container>
 
                 <v-card  class="mx-auto" style=" width: 750px; height: inherit;">
-                        <div>
+                        <div style="margin-top: 5px;">
                             <v-icon color="red lighten-2" large>mdi-cart-variant</v-icon>
                             <span style="margin-left:2px">{{sharedService.cartItemCount}}</span>
                         </div>
-                        <UserCartItem @quantityChanged="CartItemQuantityChanged($event)" @itemIsRemoved="CartItemIsRemoved($event)" v-for="item in cartItems" :userCartItem="item" :key="item"></UserCartItem>
-                        <v-btn class="btn-place-order" color="red lighten-2" @click="PlaceOrder()">Place order</v-btn>
-                        <v-expansion-panels :value='openIndex'>
+                        <UserCartItem @quantityChanged="CartItemQuantityChanged($event)" @itemIsRemoved="CartItemIsRemoved($event)" v-for="item in cartItems" :userCartItem="item" :key="item" style="margin-top: 5px;"></UserCartItem>
+                        <v-btn class="btn-place-order" color="red lighten-2" style="margin-top: 5px;" @click="PlaceOrder()">Place order</v-btn>
+                        <div style="margin-top: 10px;">
+                            <v-expansion-panels :value='openIndex'>
                             <v-expansion-panel :disabled='customerDetailPanelDisable'>
                                 <v-expansion-panel-header>Customer Details</v-expansion-panel-header>
                                 <v-expansion-panel-content>
@@ -18,28 +19,28 @@
                                         <v-col cols="8">
                                             <v-row justify="center">
                                         <v-col>
-                                            <v-text-field label="Name" outlined ></v-text-field>
+                                            <v-text-field v-model="orderSummary.shippingName" label="Name" outlined ></v-text-field>
                                         </v-col>
                                         <v-col>
-                                            <v-text-field label="Phone Number" outlined ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row justify="center">
-                                        <v-col>
-                                            <v-textarea label="Address" outlined ></v-textarea>
+                                            <v-text-field v-model="orderSummary.shippingPhoneNo" label="Phone Number" outlined ></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row justify="center">
                                         <v-col>
-                                            <v-text-field label="State" outlined ></v-text-field>
-                                        </v-col>
-                                        <v-col>
-                                            <v-text-field label="City" outlined ></v-text-field>
+                                            <v-textarea v-model="orderSummary.shippingAddress" label="Address" outlined ></v-textarea>
                                         </v-col>
                                     </v-row>
                                     <v-row justify="center">
                                         <v-col>
-                                            <v-text-field label="ZipCode" outlined ></v-text-field>
+                                            <v-text-field v-model="orderSummary.shippingState" label="State" outlined ></v-text-field>
+                                        </v-col>
+                                        <v-col>
+                                            <v-text-field v-model="orderSummary.shippingCity" label="City" outlined ></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row justify="center">
+                                        <v-col>
+                                            <v-text-field v-model="orderSummary.shippingZipCode" label="ZipCode" outlined ></v-text-field>
                                         </v-col>
                                         <v-col>
                                             <v-text-field label="Landmark" outlined ></v-text-field>
@@ -47,27 +48,60 @@
                                     </v-row>
                                     <v-row>
                                         <v-col>
-                                            <v-radio-group row>
-                                            <v-radio label="Home" value="home"></v-radio>
-                                            <v-radio label="Work" value="work"></v-radio>
-                                            <v-radio label="Other" value="other"></v-radio>
-                                        </v-radio-group>
+                                            <v-radio-group row v-model="orderSummary.shippingType">
+                                                <v-radio label="Home" value="home"></v-radio>
+                                                <v-radio label="Work" value="work"></v-radio>
+                                                <v-radio label="Other" value="other"></v-radio>
+                                            </v-radio-group>
                                         </v-col>
                                     </v-row>
                                     </v-col>
                                     <v-col style="display: flex; flex-direction: row-reverse;">
-                                        <v-btn type="submit">Continue</v-btn>
+                                        <v-btn color="red lighten-2" @click="CreateOrderSummary()">Continue</v-btn>
                                     </v-col>
                                     </v-form>
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
-                            <v-expansion-panel :disabled='orderSummaryPanelDisable'>
+                            <v-expansion-panel :disabled='orderSummaryPanelDisable' style="margin-top: 5px;">
                                 <v-expansion-panel-header>Order summary</v-expansion-panel-header>
                                 <v-expansion-panel-content>
-                                    Order Details
+                                  <v-list>
+                                    <v-list-item-content>
+                                      <v-list-item-titile>
+                                        <v-list-item-subtitle>Deliver To</v-list-item-subtitle>
+                                      </v-list-item-titile>
+                                    </v-list-item-content>
+                                    <v-list-item-content>
+                                      <v-list-item-title>{{orderSummary.shippingName}}</v-list-item-title>
+                                      <v-list-item-subtitle>{{orderSummary.shippingPhoneNo}}</v-list-item-subtitle>
+                                      <v-list-item-subtitle>{{orderSummary.shippingAddress}}</v-list-item-subtitle>
+                                      <v-list-item-subtitle>{{orderSummary.shippingCity}},{{orderSummary.shippingState}},{{orderSummary.shippingZipCode}}</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                  </v-list>
+                                  <!-- Render using v-list -->
+                                  <v-list three-line>
+                                    <template v-for="item in this.orderSummary.bookOrders">
+                                      <v-list-item v-if="item.bookName" :key="item.bookName">
+                                        <v-list-item-avatar rounded="false">
+                                          <v-img :src="item.bookImg"></v-img>
+                                        </v-list-item-avatar>
+                                        <v-list-item-content>
+                                          <v-list-item-title v-html="item.bookName"></v-list-item-title>
+                                          <v-list-item-subtitle v-html="item.autherName"></v-list-item-subtitle>
+                                          <v-list-item-subtitle>Price {{item.price}}</v-list-item-subtitle>
+                                          <v-list-item-subtitle>Quantity {{item.quantity}}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                      </v-list-item>
+                                    </template>
+                                  </v-list>
+                                  <h4>Total Order Price : {{this.orderSummary.totalPrice}} <span class="mdi mdi-currency-rupee"></span></h4>
+                                  <div style="display: flex; flex-direction: row-reverse;">
+                                        <v-btn color="red lighten-2" @click="Checkout()">CHECKOUT</v-btn>
+                                  </div>
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
                         </v-expansion-panels>
+                        </div>
                 </v-card>
             </v-container>
         </div>
@@ -78,7 +112,10 @@
 <script>
 import { sharedService } from '@/service/AppSharedService'
 import BookCartService from '@/service/BookCartService'
+import BookStoreService from '../service/BookStoreService'
 import UserCartItem from './UserCartItem.vue'
+import BookOrderService from '@/service/BookOrderService'
+import router from '@/router'
 
 export default {
   name: 'UserCart',
@@ -86,17 +123,40 @@ export default {
     UserCartItem
   },
   data: () => ({
+    bookOrderService: new BookOrderService(),
     cartService: new BookCartService(),
+    bookStoreService: new BookStoreService(),
     cartItems: [],
     sharedService: sharedService,
     openIndex: -1,
     customerDetailPanelDisable: true,
     orderSummaryPanelDisable: true,
-    customerDetails: {
-
+    orderSummary: {
+      totalPrice: 0,
+      bookOrders: [],
+      shippingAddress: 'some address',
+      shippingName: 'Amruta',
+      shippingPhoneNo: +911234567,
+      shippingState: 'Maharashtra',
+      shippingZipCode: 414604,
+      shippingCity: 'Ahmednagar',
+      shippingType: 'Home'
     }
   }),
   methods: {
+    Checkout () {
+      this.bookOrderService.addOrder(sharedService.getSignedInUserAccessToken(), this.orderSummary)
+        .then(
+          response => {
+            alert('Order has been placed successfully. Status: ' + response.status)
+            this.GetCartItemsForUser()
+            const orderId = response.data.orderId
+            router.push({ name: 'OrderAck', params: { orderId: orderId } })
+          })
+        .catch(error => {
+          alert('Error inserting order ' + error.message)
+        })
+    },
     PlaceOrder () {
       this.openIndex = 0
       this.customerDetailPanelDisable = false
@@ -128,6 +188,36 @@ export default {
           alert('Failed to delete cart items,  ' + error.message)
           this.response = 'Error: ' + error.response.status
         })
+    },
+    CreateOrderSummary () {
+      this.openIndex = 1
+      this.customerDetailPanelDisable = false
+      this.orderSummaryPanelDisable = false
+      this.orderSummary.totalPrice = 0
+      this.orderSummary.bookOrders = []
+      // Loop through each cart item,
+      // find the book of the price and calculate total.
+      // add each book present in cart, and it's quantity to the array
+      this.cartItems.forEach(cartItem => {
+        this.bookStoreService.getById(cartItem.bookID)
+          .then(
+            res => {
+              const book = res.data
+              this.orderSummary.totalPrice += cartItem.quantity * book.price
+              this.orderSummary.bookOrders.push({
+                bookId: cartItem.bookID,
+                quantity: cartItem.quantity,
+                bookName: book.bookName,
+                bookImg: book.bookImg,
+                autherName: book.autherName,
+                price: book.price,
+                totalPriceOfBook: cartItem.quantity * book.price
+              })
+            })
+          .catch(error => {
+            alert('Error getting book from server of id ' + this.userCartItem.bookID + '' + error.message)
+          })
+      })
     }
   },
   created () {

@@ -12,15 +12,26 @@
     <v-spacer/>
     <v-btn depressed right color="red lighten-2" @click="CartBtnClicked()">Cart
       <v-icon right dark>mdi-cart-outline</v-icon>
-      <span style="margin-left:2px">{{sharedService.cartItemCount}}</span>
+      <span style="margin-left:2px" v-show="isSignedIn">{{sharedService.cartItemCount}}</span>
     </v-btn>
+    <v-menu :offset-y="true">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn class="mx-2" fab dark x-small color="warning" v-bind="attrs" v-on="on" v-show="isSignedIn">
+          <v-icon>mdi-account-circle</v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item>
+          <v-btn v-show="isSignedIn" @click="SignOutBtnClicked()">Sign Out
+            <v-icon right dark>mdi-arrow-right-drop-circle-outline</v-icon>
+          </v-btn>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <v-btn v-show="!isSignedIn" @click="SignInBtnClicked()" depressed right color="red lighten-2">Sign In
         <v-icon right dark>mdi-login-variant</v-icon>
     </v-btn>
     <v-btn v-show="!isSignedIn" @click="SignUpBtnClicked()" depressed right color="red lighten-2">Sign Up
-      <v-icon right dark>mdi-arrow-right-drop-circle-outline</v-icon>
-    </v-btn>
-    <v-btn v-show="isSignedIn" @click="SignOutBtnClicked()" depressed right color="red lighten-2">Sign Out
       <v-icon right dark>mdi-arrow-right-drop-circle-outline</v-icon>
     </v-btn>
   </v-app-bar>
@@ -45,7 +56,13 @@ export default {
     appTitle: 'Bookstore',
     appFooter: 'Copyright © 2022, Amruta bookstore pvt limited. All rights reserved.',
     isSignedIn: sharedService.IsSignedIn(),
-    sharedService: sharedService
+    sharedService: sharedService,
+    items: [
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me 2' }
+    ]
   }),
   methods:
   {

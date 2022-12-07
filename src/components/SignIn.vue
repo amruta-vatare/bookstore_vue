@@ -15,6 +15,7 @@
             </v-col>
             <v-col cols="8">
                 <v-btn class="mr-4" type="submit">Login</v-btn>
+                <v-btn class="mr-4" @click="goToSignUp()">Sign Up</v-btn>
             </v-col>
         </v-row>
       </v-form>
@@ -23,11 +24,12 @@
 <script>
 import BookStoreUserService from '../service/BookStoreUserService'
 import { sharedService } from '../service/AppSharedService'
+import router from '@/router'
 export default {
   name: 'SignIn',
   data: () => ({
     bookStoreUserService: new BookStoreUserService(),
-    email: 'sac@gmail.com',
+    email: 'amruta@gmail.com',
     password: '12345'
   }),
 
@@ -56,6 +58,9 @@ export default {
           alert('Error adding User ' + this.name + ' ' + error.message)
           this.response = 'Error: ' + error.response.status
         })
+    },
+    goToSignUp () {
+      router.push({ name: 'SignUp' })
     }
   }
 }

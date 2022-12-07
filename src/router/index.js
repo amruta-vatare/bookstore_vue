@@ -5,8 +5,8 @@ import SignUp from '../components/SignUp.vue'
 import BookCard from '../components/BookCard'
 import BookCardList from '../components/BookCardList'
 import UserCart from '../components/UserCart.vue'
+import OrderAck from '../components/OrderAck.vue'
 import { sharedService } from '../service/AppSharedService'
-import CustomerDetails from '../components/CustomerDetails.vue'
 
 Vue.use(VueRouter)
 
@@ -48,9 +48,9 @@ const routes = [
     }
   },
   {
-    path: '/customerDetails',
-    name: 'CustomerDetails',
-    component: CustomerDetails
+    path: '/order',
+    name: 'OrderAck',
+    component: OrderAck
   }
 ]
 
