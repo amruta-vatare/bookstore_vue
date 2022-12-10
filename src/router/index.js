@@ -6,7 +6,7 @@ import BookCard from '../components/BookCard'
 import BookCardList from '../components/BookCardList'
 import UserCart from '../components/UserCart.vue'
 import OrderAck from '../components/OrderAck.vue'
-import { sharedService } from '../service/AppSharedService'
+import requiresAuth from './middleware/requiresAuth'
 
 Vue.use(VueRouter)
 
@@ -36,7 +36,9 @@ const routes = [
     name: 'BookCardList',
     component: BookCardList,
     meta: {
-      requiresAuth: true
+      middlewares: [
+        requiresAuth
+      ]
     }
   },
   {
@@ -44,7 +46,9 @@ const routes = [
     name: 'UserCart',
     component: UserCart,
     meta: {
-      requiresAuth: true
+      middlewares: [
+        requiresAuth
+      ]
     }
   },
   {
@@ -59,17 +63,12 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
-    if (sharedService.IsSignedIn() === false) {
-      next({ name: 'SignIn' })
-    } else {
-      next() // go to wherever I'm going
-    }
-  } else {
-    next() // does not require auth, make sure to always call next()!
+  // if there is no middleware on next route where we are going, just invoke default next.
+  if (!to.meta.middlewares) {
+    return next()
   }
+  const middlewares = to.meta.middlewares
+  return middlewares[0]({ to, from, next })
 })
 
 export default router

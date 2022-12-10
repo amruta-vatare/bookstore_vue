@@ -69,9 +69,6 @@ export default {
   },
   created () {
     sharedService.HideAppBar = true
-  },
-  beforeDestroy () {
-    sharedService.HideAppBar = false
   }
 }
 </script>

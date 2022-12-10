@@ -56,6 +56,7 @@
             <v-col cols="8">
                 <v-btn class="mr-4" @click="UserSignUp()">submit</v-btn>
                 <v-btn @click="clear()">clear</v-btn>
+                <v-btn class="ml-4" @click="signIn()">Sign In</v-btn>
             </v-col>
         </v-row>
       </v-form>
@@ -109,6 +110,9 @@ export default {
   },
 
   methods: {
+    signIn () {
+      router.push({ name: 'SignIn' })
+    },
     UserSignUp () {
       this.bookStoreUserService.add({
         firstName: this.firstName,
@@ -142,9 +146,7 @@ export default {
   },
   created () {
     sharedService.HideAppBar = true
-  },
-  beforeDestroy () {
-    sharedService.HideAppBar = false
+    console.log('signUp--Created')
   }
 }
 </script>

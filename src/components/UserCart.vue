@@ -4,12 +4,16 @@
             <v-container>
 
                 <v-card  class="mx-auto" style=" width: 750px; height: inherit;">
-                        <div style="margin-top: 5px;">
+                        <div style="padding: 10px;">
                             <v-icon color="red lighten-2" large>mdi-cart-variant</v-icon>
                             <span style="margin-left:2px">{{sharedService.cartItemCount}}</span>
                         </div>
+                        <div style="margin-top: 5px; text-align: center;" v-show="this.cartItems.length == 0">
+                          Your Cart is empty
+                        </div>
                         <UserCartItem @quantityChanged="CartItemQuantityChanged($event)" @itemIsRemoved="CartItemIsRemoved($event)" v-for="item in cartItems" :userCartItem="item" :key="item" style="margin-top: 5px;"></UserCartItem>
-                        <v-btn class="btn-place-order" color="red lighten-2" style="margin-top: 5px;" @click="PlaceOrder()">Place order</v-btn>
+                        <v-btn class="btn-place-order" v-show="!this.cartItems.length == 0" color="red lighten-2" style="margin-top: 5px;" @click="PlaceOrder()">Place order</v-btn>
+                        <v-btn class="btn-place-order" v-show ="this.cartItems.length == 0" color="red lighten-2" style="margin-top: 5px; margin-right: 10px;" @click="GoToHome()">Go to Home</v-btn>
                         <div style="margin-top: 10px;">
                             <v-expansion-panels :value='openIndex'>
                             <v-expansion-panel :disabled='customerDetailPanelDisable'>
@@ -218,14 +222,14 @@ export default {
             alert('Error getting book from server of id ' + this.userCartItem.bookID + '' + error.message)
           })
       })
+    },
+    GoToHome () {
+      router.push({ name: 'BookCardList' })
     }
   },
   created () {
     sharedService.HideSearchBox = true
     this.GetCartItemsForUser()
-  },
-  beforeDestroy () {
-    sharedService.HideSearchBox = false
   }
 }
 </script>

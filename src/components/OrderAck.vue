@@ -36,7 +36,6 @@ export default {
     sharedService.Initialize()
   },
   beforeDestroy () {
-    sharedService.HideSearchBox = false
     sharedService.HideCartBtn = false
   }
 }

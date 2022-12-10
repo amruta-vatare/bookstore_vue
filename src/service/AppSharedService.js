@@ -2,6 +2,7 @@ import { reactive } from 'vue'
 
 export const sharedService = reactive({
   cartItemCount: 0,
+  searchBoxText: '',
   Key_CartItemCount: 'CartItemCount',
   Key_IsSignedIn: 'IsSignedIn',
   Key_AccessToken: 'AccessToken',

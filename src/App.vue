@@ -5,7 +5,7 @@
     <v-toolbar-title v-text="appTitle" @click="GotoHomePage" style="cursor:pointer"></v-toolbar-title>
     <v-spacer/>
     <div class="searchBox" v-show="!sharedService.HideSearchBox">
-      <v-text-field label="Search here" solo >
+      <v-text-field label="Search here" solo v-model="sharedService.searchBoxText">
         <v-icon slot="append" color="red lighten-3">mdi-magnify</v-icon>
       </v-text-field>
     </div>
