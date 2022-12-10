@@ -64,6 +64,7 @@
 <script>
 import BookStoreUserService from '../service/BookStoreUserService'
 import router from '@/router'
+import { sharedService } from '../service/AppSharedService'
 export default {
   name: 'SignUp',
   data: () => ({
@@ -138,6 +139,12 @@ export default {
       this.select = null
       this.checkbox = false
     }
+  },
+  created () {
+    sharedService.HideAppBar = true
+  },
+  beforeDestroy () {
+    sharedService.HideAppBar = false
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center" style="margin-left: 150px;">
       <v-col cols="8" justify="center">
-        <img src="../assets/order_ack_img2.jpg" style="height:250px; width: 450px;"/>
+        <img src="../assets/order_ack_img2.jpg"/>
       </v-col>
     </v-row>
     <v-row justify="center" style="margin-left: 150px;">
@@ -31,9 +31,34 @@ export default {
   }),
   created () {
     this.orderId = this.$route.params.orderId
+    sharedService.HideSearchBox = true
+    sharedService.HideCartBtn = true
     sharedService.Initialize()
+  },
+  beforeDestroy () {
+    sharedService.HideSearchBox = false
+    sharedService.HideCartBtn = false
   }
 }
 </script>
 <style scoped>
+img{
+  height:250px;
+  width: 450px;
+  background: white;
+  position: relative;
+  animation-name: example;
+  animation-duration: 4s;
+  animation-timing-function: ease;
+  animation-delay: 2s;
+  animation-iteration-count: 2;
+  animation-direction: alternate-reverse;
+}
+@keyframes example {
+  0%   {left:0px; top:0px;}
+  25%  {left:200px; top:0px;}
+  50%  {left:200px; top:200px;}
+  75%  {left:0px; top:200px;}
+  100% {left:0px; top:0px;}
+}
 </style>

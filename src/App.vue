@@ -1,16 +1,16 @@
 <template>
 <v-app>
-  <v-app-bar app color="red lighten-2">
+  <v-app-bar app color="red lighten-2" v-show="!sharedService.HideAppBar">
     <img src="./assets/bookstoreLogo.png" @click="GotoHomePage" style="cursor:pointer" class="book-store-logo"/>
     <v-toolbar-title v-text="appTitle" @click="GotoHomePage" style="cursor:pointer"></v-toolbar-title>
     <v-spacer/>
-    <div class="searchBox">
+    <div class="searchBox" v-show="!sharedService.HideSearchBox">
       <v-text-field label="Search here" solo >
         <v-icon slot="append" color="red lighten-3">mdi-magnify</v-icon>
       </v-text-field>
     </div>
     <v-spacer/>
-    <v-btn depressed right color="red lighten-2" @click="CartBtnClicked()">Cart
+    <v-btn depressed right color="red lighten-2" @click="CartBtnClicked()" v-show="!sharedService.HideCartBtn">Cart
       <v-icon right dark>mdi-cart-outline</v-icon>
       <span style="margin-left:2px" v-show="isSignedIn">{{sharedService.cartItemCount}}</span>
     </v-btn>

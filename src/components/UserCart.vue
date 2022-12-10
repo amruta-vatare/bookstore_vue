@@ -94,7 +94,7 @@
                                       </v-list-item>
                                     </template>
                                   </v-list>
-                                  <h4>Total Order Price : {{this.orderSummary.totalPrice}} <span class="mdi mdi-currency-rupee"></span></h4>
+                                  <h4>Total Order Price :  <span class="mdi mdi-currency-rupee"></span>{{this.orderSummary.totalPrice}} </h4>
                                   <div style="display: flex; flex-direction: row-reverse;">
                                         <v-btn color="red lighten-2" @click="Checkout()">CHECKOUT</v-btn>
                                   </div>
@@ -221,7 +221,11 @@ export default {
     }
   },
   created () {
+    sharedService.HideSearchBox = true
     this.GetCartItemsForUser()
+  },
+  beforeDestroy () {
+    sharedService.HideSearchBox = false
   }
 }
 </script>

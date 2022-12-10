@@ -2,6 +2,10 @@
     <v-container>
     <v-form ref="form"  @submit.prevent="login">
         <v-row justify="center">
+          <v-col cols="8">
+                <v-app-bar class="pa-4 text-center red lighten-2 rounded-lg rounded-b-0">
+      </v-app-bar>
+            </v-col>
             <v-col cols="8">
                 <!-- <v-app-bar class="pa-4 text-center red lighten-2 rounded-lg rounded-b-0"></v-app-bar> -->
                 <h3>Sign in to your bookstore account</h3>
@@ -62,6 +66,12 @@ export default {
     goToSignUp () {
       router.push({ name: 'SignUp' })
     }
+  },
+  created () {
+    sharedService.HideAppBar = true
+  },
+  beforeDestroy () {
+    sharedService.HideAppBar = false
   }
 }
 </script>
