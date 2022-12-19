@@ -4,9 +4,21 @@
       max-width="230" max-height="315px">
       <!-- <v-hover v-slot="{ hover }"> -->
       <div style="display:flex; justify-content: center;">
-        <img :src="cardItem.bookImg" width="105" height="135"/>
+        <v-hover v-slot="{ hover }">
+        <v-img :src="cardItem.bookImg" style="max-width:105; max-height:135" :aspect-ratio="16/9">
+      <v-expand-transition>
+          <div
+            v-if="hover"
+            class="d-flex transition-fast-in-fast-out white v-card--reveal text-h7 black--text"
+            style="height: 100%;"
+          >
+          {{cardItem.bookDescription}}
+          </div>
+        </v-expand-transition>
+      </v-img>
+      </v-hover>
       </div>
-    <!-- </v-hover> -->
+     <!-- </v-hover> -->
       <v-card-title style="" v-text="cardItem.bookName"></v-card-title>
       <v-card-subtitle v-text="cardItem.autherName"></v-card-subtitle>
         <v-card-text>

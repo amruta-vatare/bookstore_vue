@@ -7,6 +7,8 @@ import BookCardList from '../components/BookCardList'
 import UserCart from '../components/UserCart.vue'
 import OrderAck from '../components/OrderAck.vue'
 import requiresAuth from './middleware/requiresAuth'
+import hideAppBar from './middleware/hideAppBar'
+import middlewarePipeline from './middlewarePipeline'
 
 Vue.use(VueRouter)
 
@@ -14,22 +16,42 @@ const routes = [
   {
     path: '/',
     name: 'BookCardList',
-    component: BookCardList
+    component: BookCardList,
+    meta: {
+      middlewares: [
+        hideAppBar
+      ]
+    }
   },
   {
     path: '/signin',
     name: 'SignIn',
-    component: SignIn
+    component: SignIn,
+    meta: {
+      middlewares: [
+        hideAppBar
+      ]
+    }
   },
   {
     path: '/signup',
     name: 'SignUp',
-    component: SignUp
+    component: SignUp,
+    meta: {
+      middlewares: [
+        hideAppBar
+      ]
+    }
   },
   {
     path: '/bookCard',
     name: 'BookCard',
-    component: BookCard
+    component: BookCard,
+    meta: {
+      middlewares: [
+        hideAppBar
+      ]
+    }
   },
   {
     path: '/bookCardList',
@@ -37,6 +59,7 @@ const routes = [
     component: BookCardList,
     meta: {
       middlewares: [
+        hideAppBar,
         requiresAuth
       ]
     }
@@ -47,6 +70,7 @@ const routes = [
     component: UserCart,
     meta: {
       middlewares: [
+        hideAppBar,
         requiresAuth
       ]
     }
@@ -54,7 +78,12 @@ const routes = [
   {
     path: '/order',
     name: 'OrderAck',
-    component: OrderAck
+    component: OrderAck,
+    meta: {
+      middlewares: [
+        hideAppBar
+      ]
+    }
   }
 ]
 
@@ -68,7 +97,12 @@ router.beforeEach((to, from, next) => {
     return next()
   }
   const middlewares = to.meta.middlewares
-  return middlewares[0]({ to, from, next })
+  // return middlewares[0]({ to, from, next })
+
+  // run chain of middlewares
+  return middlewares[0](
+    { to, from, next: middlewarePipeline(to, from, next, middlewares, 1) }
+  )
 })
 
 export default router
