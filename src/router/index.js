@@ -9,6 +9,7 @@ import OrderAck from '../components/OrderAck.vue'
 import requiresAuth from './middleware/requiresAuth'
 import hideAppBar from './middleware/hideAppBar'
 import middlewarePipeline from './middlewarePipeline'
+import OrdersList from '../components/OrdersList.vue'
 
 Vue.use(VueRouter)
 
@@ -84,6 +85,11 @@ const routes = [
         hideAppBar
       ]
     }
+  },
+  {
+    path: '/ordersList',
+    name: 'OrdersList',
+    component: OrdersList
   }
 ]
 

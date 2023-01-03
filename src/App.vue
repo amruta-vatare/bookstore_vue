@@ -20,12 +20,26 @@
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>
       </template>
-      <v-list>
+      <v-list dense>
+        <v-subheader>Profile</v-subheader>
+        <v-list-item-group v-model="selectedItem" color="primary">
         <v-list-item>
-          <v-btn v-show="isSignedIn" @click="SignOutBtnClicked()">Sign Out
-            <v-icon right dark>mdi-arrow-right-drop-circle-outline</v-icon>
-          </v-btn>
+          <v-list-item-icon>
+            <v-icon>mdi-account</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title v-show="isSignedIn" @click="SignOutBtnClicked()">Sign Out</v-list-item-title>
+          </v-list-item-content>
         </v-list-item>
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-cart-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title v-show="isSignedIn" @click="YourOrdersBtnClicked()">Your Orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        </v-list-item-group>
       </v-list>
     </v-menu>
     <v-btn v-show="!isSignedIn" @click="SignInBtnClicked()" depressed right color="red lighten-2">Sign In
@@ -81,6 +95,9 @@ export default {
     SignOutBtnClicked () {
       sharedService.SetSignedOut()
       location.href = '/'
+    },
+    YourOrdersBtnClicked () {
+      router.push({ name: 'OrdersList' })
     }
   },
   created () {
